@@ -1,6 +1,6 @@
 package fr.papycasu.notification.rest;
 
-import fr.papycasu.notification.NotificationMessage;
+import fr.papycasu.notification.model.NotificationMessage;
 
 import java.util.List;
 

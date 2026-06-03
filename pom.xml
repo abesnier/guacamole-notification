@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.papycasu</groupId>
-    <artifactId>guacamole-notifications-extension</artifactId>
+    <artifactId>guacamole-notifications</artifactId>
     <version>1.6.1</version>
     <packaging>jar</packaging>
 

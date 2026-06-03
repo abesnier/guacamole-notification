@@ -8,7 +8,7 @@
     };
 
     function baseApiPath() {
-        return 'api/session/ext/guacnotify/notifications';
+        return 'api/ext/guacnotify/notifications';
     }
 
     function buildUrl(path, query) {

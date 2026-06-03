@@ -1,5 +1,5 @@
 {
-  "guacamoleVersion": "1.6.0",
+  "guacamoleVersion": "*",
   "name": "Notifications Extension",
   "namespace": "guacamole-notification",
   "authProviders": [

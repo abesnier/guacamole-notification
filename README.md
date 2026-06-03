@@ -16,6 +16,10 @@ This project is a starter scaffold for an Apache Guacamole extension that lets a
 
 This scaffold is intentionally minimal and safe to extend. It compiles as a starter, but production deployment requires wiring into your Guacamole authentication provider/session model and hardening auth checks.
 
+Current starter behavior:
+- REST endpoints are exposed through UserContext at `/api/session/ext/guacnotify/notifications/*`.
+- The current user identifier comes from the authenticated Guacamole session (no username query parameter).
+
 ## Build
 
 ```powershell

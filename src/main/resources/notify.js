@@ -1,14 +1,13 @@
 (function () {
     'use strict';
 
-    var STORAGE_KEY_USERNAME = 'guacnotify.admin.username';
     var POLL_INTERVAL_MS = 10000;
     var state = {
         since: Date.now()
     };
 
     function baseApiPath() {
-        return 'api/ext/guacnotify/notifications';
+        return 'api/session/ext/guacnotify/notifications';
     }
 
     function buildUrl(path, query) {
@@ -27,14 +26,6 @@
 
         var asText = params.toString();
         return asText ? (url + '?' + asText) : url;
-    }
-
-    function readUsername() {
-        var input = document.getElementById('guacnotify-username');
-        if (!input) {
-            return '';
-        }
-        return input.value.trim();
     }
 
     function setStatus(message, isError) {
@@ -95,16 +86,8 @@
     }
 
     async function loadConnectedUsers() {
-        var username = readUsername();
-        if (!username) {
-            setStatus('Enter an admin username first.', true);
-            return;
-        }
-
         try {
-            var response = await fetch(buildUrl('/connected-users', {
-                username: username
-            }), {
+            var response = await fetch(buildUrl('/connected-users'), {
                 credentials: 'include'
             });
 
@@ -124,14 +107,8 @@
     }
 
     async function sendNotification() {
-        var username = readUsername();
         var messageInput = document.getElementById('guacnotify-message');
         var allMode = document.getElementById('guacnotify-mode-all');
-
-        if (!username) {
-            setStatus('Enter an admin username first.', true);
-            return;
-        }
 
         if (!messageInput || !messageInput.value.trim()) {
             setStatus('Message is required.', true);
@@ -153,9 +130,7 @@
         };
 
         try {
-            var response = await fetch(buildUrl('/broadcast', {
-                username: username
-            }), {
+            var response = await fetch(buildUrl('/broadcast'), {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -180,9 +155,7 @@
 
     async function pollNotifications() {
         try {
-            var username = readUsername();
             var response = await fetch(buildUrl('/poll', {
-                username: username,
                 since: state.since
             }), {
                 credentials: 'include'
@@ -217,27 +190,17 @@
     function wireUi() {
         var panel = document.getElementById('guacnotify-panel');
         var toggle = document.getElementById('guacnotify-toggle');
-        var username = document.getElementById('guacnotify-username');
         var modeAll = document.getElementById('guacnotify-mode-all');
         var modeSelected = document.getElementById('guacnotify-mode-selected');
         var refresh = document.getElementById('guacnotify-refresh-users');
         var send = document.getElementById('guacnotify-send');
 
-        if (!panel || !toggle || !username || !modeAll || !modeSelected || !refresh || !send) {
+        if (!panel || !toggle || !modeAll || !modeSelected || !refresh || !send) {
             return;
-        }
-
-        var remembered = localStorage.getItem(STORAGE_KEY_USERNAME);
-        if (remembered) {
-            username.value = remembered;
         }
 
         toggle.addEventListener('click', function () {
             panel.hidden = !panel.hidden;
-        });
-
-        username.addEventListener('change', function () {
-            localStorage.setItem(STORAGE_KEY_USERNAME, username.value.trim());
         });
 
         modeAll.addEventListener('change', function () {

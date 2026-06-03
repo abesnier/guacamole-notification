@@ -14,8 +14,14 @@ public class GuacNotifyExtensionRootResource {
     private static final ConnectedUserService CONNECTED_USERS = new ConnectedUserService();
     private static final AdminAuthorizer AUTHORIZER = new AdminAuthorizer();
 
+    private final String currentUsername;
+
+    public GuacNotifyExtensionRootResource(String currentUsername) {
+        this.currentUsername = currentUsername;
+    }
+
     @Path("")
     public NotificationResource notifications() {
-        return new NotificationResource(STORE, CONNECTED_USERS, AUTHORIZER);
+        return new NotificationResource(STORE, CONNECTED_USERS, AUTHORIZER, currentUsername);
     }
 }

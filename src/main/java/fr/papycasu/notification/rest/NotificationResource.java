@@ -23,41 +23,42 @@ public class NotificationResource {
     private final NotificationStore store;
     private final ConnectedUserService connectedUsers;
     private final AdminAuthorizer adminAuthorizer;
+    private final String currentUsername;
 
     public NotificationResource(NotificationStore store,
                                 ConnectedUserService connectedUsers,
-                                AdminAuthorizer adminAuthorizer) {
+                                AdminAuthorizer adminAuthorizer,
+                                String currentUsername) {
         this.store = store;
         this.connectedUsers = connectedUsers;
         this.adminAuthorizer = adminAuthorizer;
+        this.currentUsername = currentUsername;
     }
 
     @GET
     @Path("connected-users")
-    public List<String> getConnectedUsers(@QueryParam("username") String username) {
-        adminAuthorizer.requireAdmin(username);
+    public List<String> getConnectedUsers() {
+        adminAuthorizer.requireAdmin(currentUsername);
         return connectedUsers.getConnectedUserIds();
     }
 
     @POST
     @Path("broadcast")
     @Consumes(MediaType.APPLICATION_JSON)
-    public NotificationMessage broadcast(SendNotificationRequest request,
-                                         @QueryParam("username") String username) {
-        adminAuthorizer.requireAdmin(username);
+    public NotificationMessage broadcast(SendNotificationRequest request) {
+        adminAuthorizer.requireAdmin(currentUsername);
 
         boolean all = "all".equalsIgnoreCase(request.getTargetMode());
         List<String> targets = all ? Collections.emptyList() : safeTargets(request.getUserIds());
 
-        return store.add(new NotificationMessage(username, request.getMessage(), all, targets));
+        return store.add(new NotificationMessage(currentUsername, request.getMessage(), all, targets));
     }
 
     @GET
     @Path("poll")
-    public PollResponse poll(@QueryParam("username") String username,
-                             @QueryParam("since") Long since) {
+    public PollResponse poll(@QueryParam("since") Long since) {
         long sinceEpochMs = since == null ? 0L : since;
-        return new PollResponse(store.poll(username, sinceEpochMs));
+        return new PollResponse(store.poll(currentUsername, sinceEpochMs));
     }
 
     private List<String> safeTargets(List<String> userIds) {

@@ -10,19 +10,27 @@
         return 'api/session/ext/guacnotify/notifications';
     }
 
+    function readAuthToken() {
+        return localStorage.getItem('GUAC_AUTH_TOKEN') || '';
+    }
+
     function buildUrl(path, query) {
         var url = baseApiPath() + path;
-        if (!query) {
-            return url;
+        var params = new URLSearchParams();
+
+        var token = readAuthToken();
+        if (token) {
+            params.set('token', token);
         }
 
-        var params = new URLSearchParams();
-        Object.keys(query).forEach(function (key) {
-            var value = query[key];
-            if (value !== null && value !== undefined && value !== '') {
-                params.set(key, String(value));
-            }
-        });
+        if (query) {
+            Object.keys(query).forEach(function (key) {
+                var value = query[key];
+                if (value !== null && value !== undefined && value !== '') {
+                    params.set(key, String(value));
+                }
+            });
+        }
 
         var asText = params.toString();
         return asText ? (url + '?' + asText) : url;
@@ -187,6 +195,37 @@
         }
     }
 
+    function ensureWidgetExists() {
+        if (document.getElementById('guacnotify-widget')) {
+            return;
+        }
+
+        var container = document.createElement('div');
+        container.id = 'guacnotify-widget';
+        container.className = 'guacnotify-widget';
+        container.innerHTML = [
+            '<button id="guacnotify-toggle" class="guacnotify-toggle" type="button">Notifications</button>',
+            '<section id="guacnotify-panel" class="guacnotify-panel" hidden>',
+            '  <h3>Broadcast Notification</h3>',
+            '  <label for="guacnotify-message">Message</label>',
+            '  <textarea id="guacnotify-message" rows="3" placeholder="Planned maintenance starts in 10 minutes."></textarea>',
+            '  <div class="guacnotify-row">',
+            '    <label><input id="guacnotify-mode-all" type="radio" name="guacnotify-mode" value="all" checked> All users</label>',
+            '    <label><input id="guacnotify-mode-selected" type="radio" name="guacnotify-mode" value="selected"> Selected users</label>',
+            '  </div>',
+            '  <label for="guacnotify-targets">Targets</label>',
+            '  <select id="guacnotify-targets" multiple size="5" disabled></select>',
+            '  <div class="guacnotify-actions">',
+            '    <button id="guacnotify-refresh-users" type="button">Refresh users</button>',
+            '    <button id="guacnotify-send" type="button">Send</button>',
+            '  </div>',
+            '  <p id="guacnotify-status" class="guacnotify-status" aria-live="polite"></p>',
+            '</section>'
+        ].join('');
+
+        document.body.appendChild(container);
+    }
+
     function wireUi() {
         var panel = document.getElementById('guacnotify-panel');
         var toggle = document.getElementById('guacnotify-toggle');
@@ -217,6 +256,7 @@
     }
 
     function boot() {
+        ensureWidgetExists();
         wireUi();
         pollNotifications();
         setInterval(pollNotifications, POLL_INTERVAL_MS);

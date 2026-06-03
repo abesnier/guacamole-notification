@@ -24,10 +24,17 @@ public class GuacNotifyAuthenticationProvider extends AbstractAuthenticationProv
 
     @Override
     public UserContext getUserContext(AuthenticatedUser authenticatedUser) throws GuacamoleException {
-        if (authenticatedUser == null) {
-            return null;
+        return null;
+    }
+
+    @Override
+    public UserContext decorate(UserContext context,
+                                AuthenticatedUser authenticatedUser,
+                                Credentials credentials) throws GuacamoleException {
+        if (context == null || authenticatedUser == null) {
+            return context;
         }
 
-        return new GuacNotifyUserContext(this, authenticatedUser.getIdentifier());
+        return new GuacNotifyDecoratingUserContext(this, context, authenticatedUser.getIdentifier());
     }
 }

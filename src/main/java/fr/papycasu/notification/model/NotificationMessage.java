@@ -1,4 +1,4 @@
-package fr.papycasu.notification.model;
+package fr.papycasu.notifications.model;
 
 import java.time.Instant;
 import java.util.Collections;

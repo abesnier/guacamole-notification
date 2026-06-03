@@ -1,9 +1,9 @@
-package fr.papycasu.notification;
+package fr.papycasu.notifications;
 
-import fr.papycasu.notification.rest.NotificationResource;
-import fr.papycasu.notification.security.AdminAuthorizer;
-import fr.papycasu.notification.service.ConnectedUserService;
-import fr.papycasu.notification.store.NotificationStore;
+import fr.papycasu.notifications.rest.NotificationResource;
+import fr.papycasu.notifications.security.AdminAuthorizer;
+import fr.papycasu.notifications.service.ConnectedUserService;
+import fr.papycasu.notifications.store.NotificationStore;
 
 import javax.ws.rs.Path;
 
@@ -14,7 +14,7 @@ public class GuacNotifyExtensionRootResource {
     private static final ConnectedUserService CONNECTED_USERS = new ConnectedUserService();
     private static final AdminAuthorizer AUTHORIZER = new AdminAuthorizer();
 
-    @Path("notifications")
+    @Path("")
     public NotificationResource notifications() {
         return new NotificationResource(STORE, CONNECTED_USERS, AUTHORIZER);
     }

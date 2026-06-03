@@ -1,6 +1,6 @@
-package fr.papycasu.notification.store;
+package fr.papycasu.notifications.store;
 
-import fr.papycasu.notification.model.NotificationMessage;
+import fr.papycasu.notifications.model.NotificationMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

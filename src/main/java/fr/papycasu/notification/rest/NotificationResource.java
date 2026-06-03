@@ -1,10 +1,10 @@
-package fr.papycasu.notification.rest;
+package fr.papycasu.notifications.rest;
 
-import fr.papycasu.notification.model.NotificationMessage;
-import fr.papycasu.notification.model.SendNotificationRequest;
-import fr.papycasu.notification.security.AdminAuthorizer;
-import fr.papycasu.notification.service.ConnectedUserService;
-import fr.papycasu.notification.store.NotificationStore;
+import fr.papycasu.notifications.model.NotificationMessage;
+import fr.papycasu.notifications.model.SendNotificationRequest;
+import fr.papycasu.notifications.security.AdminAuthorizer;
+import fr.papycasu.notifications.service.ConnectedUserService;
+import fr.papycasu.notifications.store.NotificationStore;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;

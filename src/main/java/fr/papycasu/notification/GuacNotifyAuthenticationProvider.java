@@ -1,4 +1,4 @@
-package fr.papycasu.notification;
+package fr.papycasu.notifications;
 
 import org.apache.guacamole.GuacamoleException;
 import org.apache.guacamole.net.auth.AbstractAuthenticationProvider;

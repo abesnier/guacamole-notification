@@ -1,4 +1,4 @@
-package fr.papycasu.notification.service;
+package fr.papycasu.notifications.service;
 
 import java.util.List;
 

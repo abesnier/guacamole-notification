@@ -3,7 +3,7 @@
   "name": "Notifications Extension",
   "namespace": "guacamole-notification",
   "authProviders": [
-    "fr.papycasu.notification.GuacNotifyAuthenticationProvider"
+    "fr.papycasu.notifications.GuacNotifyAuthenticationProvider"
   ],
   "js": [
     "notify.js"

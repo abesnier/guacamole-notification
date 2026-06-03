@@ -1,4 +1,4 @@
-package fr.papycasu.notification.security;
+package fr.papycasu.notifications.security;
 
 /**
  * Replace with real Guacamole permission checks. This class intentionally

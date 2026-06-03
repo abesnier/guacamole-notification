@@ -1,9 +1,53 @@
+.guacnotify-widget {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 7000;
+}
+
+.guacnotify-toggle {
+    border: 1px solid #10395d;
+    border-radius: 10px;
+    background: #184e77;
+    color: #ffffff;
+    padding: 10px 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .guacnotify-panel {
+    width: min(420px, calc(100vw - 32px));
+    margin-top: 8px;
     border: 1px solid #dadfe6;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 12px;
-    margin: 12px 0;
     background: #ffffff;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.guacnotify-panel h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.guacnotify-panel label {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2b3e50;
+}
+
+.guacnotify-panel input[type="text"],
+.guacnotify-panel textarea,
+.guacnotify-panel select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #c7d2dd;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 13px;
 }
 
 .guacnotify-row {
@@ -11,6 +55,38 @@
     gap: 8px;
     align-items: center;
     margin-bottom: 8px;
+}
+
+.guacnotify-row label {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.guacnotify-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.guacnotify-actions button {
+    border: 1px solid #9fb5ca;
+    border-radius: 8px;
+    background: #f4f8fb;
+    color: #13293d;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.guacnotify-status {
+    min-height: 1.2em;
+    margin: 8px 0 0;
+    color: #1a4f22;
+    font-size: 12px;
+}
+
+.guacnotify-status.error {
+    color: #8c1d18;
 }
 
 .guacnotify-toast {

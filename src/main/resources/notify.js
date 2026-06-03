@@ -36,6 +36,19 @@
         return asText ? (url + '?' + asText) : url;
     }
 
+    function apiFetch(url, options) {
+        var token = readAuthToken();
+        var headers = (options && options.headers) ? Object.assign({}, options.headers) : {};
+        if (token) {
+            headers['Guacamole-Token'] = token;
+        }
+
+        return fetch(url, Object.assign({
+            credentials: 'include',
+            headers: headers
+        }, options || {}));
+    }
+
     function setStatus(message, isError) {
         var status = document.getElementById('guacnotify-status');
         if (!status) {
@@ -95,9 +108,7 @@
 
     async function loadConnectedUsers() {
         try {
-            var response = await fetch(buildUrl('/connected-users'), {
-                credentials: 'include'
-            });
+            var response = await apiFetch(buildUrl('/connected-users'));
 
             if (!response.ok) {
                 setStatus('Unable to load connected users (' + response.status + ').', true);
@@ -138,9 +149,8 @@
         };
 
         try {
-            var response = await fetch(buildUrl('/broadcast'), {
+            var response = await apiFetch(buildUrl('/broadcast'), {
                 method: 'POST',
-                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -163,11 +173,9 @@
 
     async function pollNotifications() {
         try {
-            var response = await fetch(buildUrl('/poll', {
+            var response = await apiFetch(buildUrl('/poll', {
                 since: state.since
-            }), {
-                credentials: 'include'
-            });
+            }));
             if (!response.ok) {
                 return;
             }

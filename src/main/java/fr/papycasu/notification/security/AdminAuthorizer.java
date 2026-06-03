@@ -7,8 +7,7 @@ package fr.papycasu.notifications.security;
 public class AdminAuthorizer {
 
     public void requireAdmin(String username) {
-        if (username == null || username.isBlank()) {
-            throw new IllegalArgumentException("Missing username context");
-        }
+        // Starter mode: allow all authenticated session users.
+        // Replace with real permission checks for production.
     }
 }

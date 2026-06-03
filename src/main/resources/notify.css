@@ -1,0 +1,27 @@
+.guacnotify-panel {
+    border: 1px solid #dadfe6;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    background: #ffffff;
+}
+
+.guacnotify-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.guacnotify-toast {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    max-width: 420px;
+    background: #13293d;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    z-index: 9999;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+}

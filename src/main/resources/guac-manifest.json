@@ -1,0 +1,18 @@
+{
+  "guacamoleVersion": "1.6.0",
+  "name": "Notifications Extension",
+  "namespace": "guacamole-notification",
+  "authProviders": [
+    "fr.papycasu.notification.GuacNotifyAuthenticationProvider"
+  ],
+  "js": [
+    "notify.js"
+  ],
+  "css": [
+    "notify.css"
+  ],
+  "html": [
+    "notify-admin.html"
+  ],
+  "resources": {}
+}

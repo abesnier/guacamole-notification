@@ -114,11 +114,17 @@
     flex: 1;
     /*font-size: 14px;*/
     line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.guacnotify-toast strong {
+    display: block ;
 }
 
 .guacnotify-toast-close {
     flex-shrink: 0;
-    background: transparent;
+    background: #000;
     border: none;
     color: #c7d2dd;
     font-size: 18px;
@@ -126,6 +132,7 @@
     cursor: pointer;
     padding: 0 2px;
     min-width: unset !important;
+    margin: unset !important;
 }
 
 .guacnotify-toast-close:hover {

@@ -110,16 +110,26 @@
     transition: opacity 0.25s ease;
 }
 
-.guacnotify-toast span {
+.guacnotify-toast-text {
     flex: 1;
-    /*font-size: 14px;*/
     line-height: 1.4;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-.guacnotify-toast strong {
-    display: block ;
+.guacnotify-toast-timestamp {
+    font-size: 12px;
+    color: #c7d2dd;
+    margin-bottom: 2px;
+}
+
+.guacnotify-toast-label {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.guacnotify-toast-body {
+    display: block;
 }
 
 .guacnotify-toast-close {

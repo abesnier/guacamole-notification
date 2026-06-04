@@ -103,17 +103,35 @@
         return container;
     }
 
-    function createToast(label, body) {
+    function formatToastTimestamp(epochMs) {
+        var when = epochMs ? new Date(epochMs) : new Date();
+        return when.toLocaleString();
+    }
+
+    function createToast(label, body, createdAtEpochMs) {
         var container = getToastContainer();
 
         var toast = document.createElement('div');
         toast.className = 'guacnotify-toast';
 
-        var text = document.createElement('span');
+        var text = document.createElement('div');
+        text.className = 'guacnotify-toast-text';
+
+        var timestamp = document.createElement('div');
+        timestamp.className = 'guacnotify-toast-timestamp';
+        timestamp.textContent = formatToastTimestamp(createdAtEpochMs);
+
         var strong = document.createElement('strong');
-        strong.textContent = label + ' ';
+        strong.className = 'guacnotify-toast-label';
+        strong.textContent = label;
+
+        var bodyText = document.createElement('div');
+        bodyText.className = 'guacnotify-toast-body';
+        bodyText.textContent = body;
+
+        text.appendChild(timestamp);
         text.appendChild(strong);
-        text.appendChild(document.createTextNode(body));
+        text.appendChild(bodyText);
 
         var closeBtn = document.createElement('button');
         closeBtn.className = 'guacnotify-toast-close';
@@ -419,7 +437,7 @@
             var payload = await response.json();
             if (payload && payload.items && payload.items.length) {
                 payload.items.forEach(function (item) {
-                    createToast('Admin message:', item.message);
+                    createToast('Admin message:', item.message, item.createdAtEpochMs);
                     if (item.createdAtEpochMs && item.createdAtEpochMs > state.since) {
                         state.since = item.createdAtEpochMs;
                     }

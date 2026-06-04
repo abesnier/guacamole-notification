@@ -410,7 +410,7 @@
             var payload = await response.json();
             if (payload && payload.items && payload.items.length) {
                 payload.items.forEach(function (item) {
-                    createToast('Admin message: ' + item.message);
+                    createToast('<b>Admin message:</b> ' + item.message);
                     if (item.createdAtEpochMs && item.createdAtEpochMs > state.since) {
                         state.since = item.createdAtEpochMs;
                     }

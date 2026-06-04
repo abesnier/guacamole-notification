@@ -4,7 +4,9 @@
     var POLL_INTERVAL_MS = 10000;
     var SETTINGS_TAB_ID = 'notifications';
     var state = {
-        since: Date.now()
+        since: Date.now(),
+        hasLoadedConnectedUsers: false,
+        wasInNotificationsTab: false
     };
 
     function baseApiPath() {
@@ -289,9 +291,12 @@
     }
 
     async function syncSettingsUi() {
+        var notificationsTabVisible = inNotificationsTab();
+
         if (!inSettingsView()) {
             ensureSettingsTab(false);
             ensureSettingsPage(false);
+            state.wasInNotificationsTab = false;
             return;
         }
 
@@ -299,14 +304,20 @@
         ensureSettingsTab(isAdmin);
         ensureSettingsPage(isAdmin);
 
-        if (isAdmin && inNotificationsTab()) {
+        if (isAdmin && notificationsTabVisible) {
             hideNativeSettingsPanels();
             wireUi();
-            loadConnectedUsers();
+
+            if (!state.wasInNotificationsTab && !state.hasLoadedConnectedUsers) {
+                state.hasLoadedConnectedUsers = true;
+                loadConnectedUsers();
+            }
         }
         else {
             hideNativeSettingsPanels();
         }
+
+        state.wasInNotificationsTab = notificationsTabVisible;
     }
 
     function renderTargets(userIds) {

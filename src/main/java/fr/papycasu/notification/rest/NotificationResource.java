@@ -56,6 +56,7 @@ public class NotificationResource {
     @GET
     @Path("poll")
     public PollResponse poll(@QueryParam("since") Long since) {
+        connectedUsers.heartbeat(currentUsername);
         long sinceEpochMs = since == null ? 0L : since;
         return new PollResponse(store.poll(currentUsername, sinceEpochMs));
     }

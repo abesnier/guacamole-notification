@@ -103,14 +103,17 @@
         return container;
     }
 
-    function createToast(message) {
+    function createToast(label, body) {
         var container = getToastContainer();
 
         var toast = document.createElement('div');
         toast.className = 'guacnotify-toast';
 
         var text = document.createElement('span');
-        text.textContent = message;
+        var strong = document.createElement('strong');
+        strong.textContent = label + ' ';
+        text.appendChild(strong);
+        text.appendChild(document.createTextNode(body));
 
         var closeBtn = document.createElement('button');
         closeBtn.className = 'guacnotify-toast-close';
@@ -410,7 +413,7 @@
             var payload = await response.json();
             if (payload && payload.items && payload.items.length) {
                 payload.items.forEach(function (item) {
-                    createToast('<b>Admin message:</b> ' + item.message);
+                    createToast('Admin message:', item.message);
                     if (item.createdAtEpochMs && item.createdAtEpochMs > state.since) {
                         state.since = item.createdAtEpochMs;
                     }

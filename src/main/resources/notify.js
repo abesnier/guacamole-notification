@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var POLL_INTERVAL_MS = 10000;
+    var POLL_INTERVAL_MS = 5000;
     var SETTINGS_TAB_ID = 'notifications';
     var state = {
         since: Date.now(),
@@ -190,7 +190,7 @@
             '      <label><input id="guacnotify-mode-selected" type="radio" name="guacnotify-mode" value="selected"> Selected users</label>',
             '    </div>',
             '    <label for="guacnotify-targets">Targets</label>',
-            '    <select id="guacnotify-targets" multiple size="8" disabled></select>',
+            '    <select id="guacnotify-targets" multiple size="5" disabled></select>',
             '    <div class="guacnotify-actions">',
             '      <button id="guacnotify-refresh-users" type="button">Refresh users</button>',
             '      <button id="guacnotify-send" type="button">Send</button>',
@@ -294,6 +294,9 @@
     async function syncSettingsUi() {
         var notificationsTabVisible = inNotificationsTab();
 
+        // Apply panel visibility immediately to avoid transient blank states while async checks run.
+        hideNativeSettingsPanels();
+
         if (!inSettingsView()) {
             ensureSettingsTab(false);
             ensureSettingsPage(false);
@@ -306,7 +309,6 @@
         ensureSettingsPage(isAdmin);
 
         if (isAdmin && notificationsTabVisible) {
-            hideNativeSettingsPanels();
             wireUi();
 
             if (!state.wasInNotificationsTab && !state.hasLoadedConnectedUsers) {
@@ -314,11 +316,15 @@
                 loadConnectedUsers();
             }
         }
-        else {
-            hideNativeSettingsPanels();
-        }
 
         state.wasInNotificationsTab = notificationsTabVisible;
+    }
+
+    function scheduleSettingsUiResync() {
+        // Angular may rebuild settings DOM after hash changes; retry quickly to keep tab stable.
+        [50, 200, 600].forEach(function (delay) {
+            window.setTimeout(syncSettingsUi, delay);
+        });
     }
 
     function renderTargets(userIds) {
@@ -435,7 +441,10 @@
 
     function boot() {
         syncSettingsUi();
-        window.addEventListener('hashchange', syncSettingsUi);
+        window.addEventListener('hashchange', function () {
+            syncSettingsUi();
+            scheduleSettingsUiResync();
+        });
         pollNotifications();
         setInterval(pollNotifications, POLL_INTERVAL_MS);
         setInterval(syncSettingsUi, 2000);

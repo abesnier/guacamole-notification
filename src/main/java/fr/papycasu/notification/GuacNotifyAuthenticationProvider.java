@@ -5,6 +5,9 @@ import org.apache.guacamole.net.auth.AbstractAuthenticationProvider;
 import org.apache.guacamole.net.auth.Credentials;
 import org.apache.guacamole.net.auth.AuthenticatedUser;
 import org.apache.guacamole.net.auth.UserContext;
+import org.apache.guacamole.net.auth.permission.SystemPermission;
+
+import fr.papycasu.notifications.security.AdminPermissionRegistry;
 
 /**
  * Starter provider that exposes extension REST resources.
@@ -28,5 +31,21 @@ public class GuacNotifyAuthenticationProvider extends AbstractAuthenticationProv
             return null;
         }
         return new GuacNotifyUserContext(this, authenticatedUser.getIdentifier());
+    }
+
+    @Override
+    public UserContext decorate(UserContext context,
+                                AuthenticatedUser authenticatedUser,
+                                Credentials credentials) throws GuacamoleException {
+        if (context == null || authenticatedUser == null) {
+            return context;
+        }
+
+        boolean isAdmin = context.self()
+                .getSystemPermissions()
+                .hasPermission(SystemPermission.Type.ADMINISTER);
+
+        AdminPermissionRegistry.record(authenticatedUser.getIdentifier(), isAdmin);
+        return context;
     }
 }

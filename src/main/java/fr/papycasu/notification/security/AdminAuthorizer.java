@@ -1,13 +1,16 @@
 package fr.papycasu.notifications.security;
 
+import org.apache.guacamole.GuacamoleSecurityException;
+
 /**
- * Replace with real Guacamole permission checks. This class intentionally
- * defaults to allowing all requests in starter mode.
+ * Enforces Guacamole's system-level ADMINISTER permission for actions that
+ * should only be available to administrators.
  */
 public class AdminAuthorizer {
 
-    public void requireAdmin(String username) {
-        // Starter mode: allow all authenticated session users.
-        // Replace with real permission checks for production.
+    public void requireAdmin(String username) throws GuacamoleSecurityException {
+        if (!AdminPermissionRegistry.isAdmin(username)) {
+            throw new GuacamoleSecurityException("Permission denied.");
+        }
     }
 }

@@ -1,0 +1,24 @@
+{
+  "GUACNOTIFY": {
+    "TAB_LABEL": "Notifications",
+    "SETTINGS_TITLE": "Broadcast Notification",
+    "SETTINGS_HELP": "Send a message to all active users or a selected subset.",
+    "LABEL_MESSAGE": "Message",
+    "PLACEHOLDER_MESSAGE": "Planned maintenance starts in 10 minutes.",
+    "MODE_ALL": "All users",
+    "MODE_SELECTED": "Selected users",
+    "LABEL_TARGETS": "Targets",
+    "ACTION_REFRESH_USERS": "Refresh users",
+    "ACTION_SEND": "Send",
+    "STATUS_LOAD_USERS_FAILED_WITH_STATUS": "Unable to load connected users ({{STATUS}}).",
+    "STATUS_USERS_REFRESHED": "Connected users refreshed.",
+    "STATUS_LOAD_USERS_FAILED": "Unable to load connected users.",
+    "STATUS_MESSAGE_REQUIRED": "Message is required.",
+    "STATUS_TARGET_REQUIRED": "Select at least one target user.",
+    "STATUS_SEND_FAILED_WITH_STATUS": "Send failed ({{STATUS}}).",
+    "STATUS_SENT": "Notification sent.",
+    "STATUS_SEND_FAILED": "Send failed.",
+    "TOAST_ADMIN_MESSAGE": "Admin message:",
+    "TOAST_DISMISS_ARIA": "Dismiss notification"
+  }
+}

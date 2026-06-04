@@ -3,6 +3,7 @@
 
     var POLL_INTERVAL_MS = 5000;
     var SETTINGS_TAB_ID = 'notifications';
+    var I18N_PREFIX = 'GUACNOTIFY';
     var state = {
         since: Date.now(),
         isAdmin: null,
@@ -82,6 +83,35 @@
         status.classList.toggle('error', !!isError);
     }
 
+    function getTranslateService() {
+        try {
+            var injector = angular.element(document.body).injector();
+            if (injector) {
+                return injector.get('$translate');
+            }
+        }
+        catch (e) {}
+
+        return null;
+    }
+
+    function t(keySuffix, fallback, variables) {
+        var fullKey = I18N_PREFIX + '.' + keySuffix;
+        var fallbackText = fallback || fullKey;
+        var translate = getTranslateService();
+
+        if (!translate || typeof translate.instant !== 'function') {
+            return fallbackText;
+        }
+
+        var translated = translate.instant(fullKey, variables || {});
+        if (!translated || translated === fullKey) {
+            return fallbackText;
+        }
+
+        return translated;
+    }
+
     function selectedTargetIds() {
         var select = document.getElementById('guacnotify-targets');
         if (!select) {
@@ -136,7 +166,7 @@
         var closeBtn = document.createElement('button');
         closeBtn.className = 'guacnotify-toast-close';
         closeBtn.textContent = '\u00d7';
-        closeBtn.setAttribute('aria-label', 'Dismiss notification');
+        closeBtn.setAttribute('aria-label', t('TOAST_DISMISS_ARIA', 'Dismiss notification'));
         closeBtn.addEventListener('click', function () {
             toast.classList.add('guacnotify-toast-hiding');
             var removed = false;
@@ -186,7 +216,7 @@
             link.id = 'guacnotify-settings-tab-link';
             link.className = 'home';
             link.href = '#/settings/' + SETTINGS_TAB_ID;
-            link.textContent = 'Notifications';
+            link.textContent = t('TAB_LABEL', 'Notifications');
 
             item.appendChild(link);
             pageList.appendChild(item);
@@ -199,19 +229,19 @@
         return [
             '<section class="guacnotify-settings-page">',
             '  <div class="guacnotify-settings-card">',
-            '    <h3>Broadcast Notification</h3>',
-            '    <p class="guacnotify-settings-help">Send a message to all active users or a selected subset.</p>',
-            '    <label for="guacnotify-message">Message</label>',
-            '    <textarea id="guacnotify-message" rows="4" placeholder="Planned maintenance starts in 10 minutes."></textarea>',
+            '    <h3>' + t('SETTINGS_TITLE', 'Broadcast Notification') + '</h3>',
+            '    <p class="guacnotify-settings-help">' + t('SETTINGS_HELP', 'Send a message to all active users or a selected subset.') + '</p>',
+            '    <label for="guacnotify-message">' + t('LABEL_MESSAGE', 'Message') + '</label>',
+            '    <textarea id="guacnotify-message" rows="4" placeholder="' + t('PLACEHOLDER_MESSAGE', 'Planned maintenance starts in 10 minutes.') + '"></textarea>',
             '    <div class="guacnotify-row">',
-            '      <label><input id="guacnotify-mode-all" type="radio" name="guacnotify-mode" value="all" checked> All users</label>',
-            '      <label><input id="guacnotify-mode-selected" type="radio" name="guacnotify-mode" value="selected"> Selected users</label>',
+            '      <label><input id="guacnotify-mode-all" type="radio" name="guacnotify-mode" value="all" checked> ' + t('MODE_ALL', 'All users') + '</label>',
+            '      <label><input id="guacnotify-mode-selected" type="radio" name="guacnotify-mode" value="selected"> ' + t('MODE_SELECTED', 'Selected users') + '</label>',
             '    </div>',
-            '    <label for="guacnotify-targets">Targets</label>',
+            '    <label for="guacnotify-targets">' + t('LABEL_TARGETS', 'Targets') + '</label>',
             '    <select id="guacnotify-targets" multiple size="5" disabled></select>',
             '    <div class="guacnotify-actions">',
-            '      <button id="guacnotify-refresh-users" type="button">Refresh users</button>',
-            '      <button id="guacnotify-send" type="button">Send</button>',
+            '      <button id="guacnotify-refresh-users" type="button">' + t('ACTION_REFRESH_USERS', 'Refresh users') + '</button>',
+            '      <button id="guacnotify-send" type="button">' + t('ACTION_SEND', 'Send') + '</button>',
             '    </div>',
             '    <p id="guacnotify-status" class="guacnotify-status" aria-live="polite"></p>',
             '  </div>',
@@ -365,16 +395,18 @@
             var response = await apiFetch(buildUrl('/connected-users'));
 
             if (!response.ok) {
-                setStatus('Unable to load connected users (' + response.status + ').', true);
+                setStatus(t('STATUS_LOAD_USERS_FAILED_WITH_STATUS', 'Unable to load connected users ({{STATUS}}).', {
+                    STATUS: response.status
+                }), true);
                 return;
             }
 
             var payload = await response.json();
             renderTargets(Array.isArray(payload) ? payload : []);
-            setStatus('Connected users refreshed.', false);
+            setStatus(t('STATUS_USERS_REFRESHED', 'Connected users refreshed.'), false);
         }
         catch (err) {
-            setStatus('Unable to load connected users.', true);
+            setStatus(t('STATUS_LOAD_USERS_FAILED', 'Unable to load connected users.'), true);
             console.debug('guacnotify connected-users failed', err);
         }
     }
@@ -384,7 +416,7 @@
         var allMode = document.getElementById('guacnotify-mode-all');
 
         if (!messageInput || !messageInput.value.trim()) {
-            setStatus('Message is required.', true);
+            setStatus(t('STATUS_MESSAGE_REQUIRED', 'Message is required.'), true);
             return;
         }
 
@@ -392,7 +424,7 @@
         var targets = allUsers ? [] : selectedTargetIds();
 
         if (!allUsers && !targets.length) {
-            setStatus('Select at least one target user.', true);
+            setStatus(t('STATUS_TARGET_REQUIRED', 'Select at least one target user.'), true);
             return;
         }
 
@@ -412,15 +444,17 @@
             });
 
             if (!response.ok) {
-                setStatus('Send failed (' + response.status + ').', true);
+                setStatus(t('STATUS_SEND_FAILED_WITH_STATUS', 'Send failed ({{STATUS}}).', {
+                    STATUS: response.status
+                }), true);
                 return;
             }
 
-            setStatus('Notification sent.', false);
+            setStatus(t('STATUS_SENT', 'Notification sent.'), false);
             messageInput.value = '';
         }
         catch (err) {
-            setStatus('Send failed.', true);
+            setStatus(t('STATUS_SEND_FAILED', 'Send failed.'), true);
             console.debug('guacnotify broadcast failed', err);
         }
     }
@@ -437,7 +471,7 @@
             var payload = await response.json();
             if (payload && payload.items && payload.items.length) {
                 payload.items.forEach(function (item) {
-                    createToast('Admin message:', item.message, item.createdAtEpochMs);
+                    createToast(t('TOAST_ADMIN_MESSAGE', 'Admin message:'), item.message, item.createdAtEpochMs);
                     if (item.createdAtEpochMs && item.createdAtEpochMs > state.since) {
                         state.since = item.createdAtEpochMs;
                     }

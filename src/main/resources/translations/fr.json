@@ -1,0 +1,24 @@
+{
+  "GUACNOTIFY": {
+    "TAB_LABEL": "Notifications",
+    "SETTINGS_TITLE": "Notification de diffusion",
+    "SETTINGS_HELP": "Envoyer un message \u00e0 tous les utilisateurs actifs ou \u00e0 un sous-ensemble s\u00e9lectionn\u00e9.",
+    "LABEL_MESSAGE": "Message",
+    "PLACEHOLDER_MESSAGE": "Une maintenance planifi\u00e9e commence dans 10 minutes.",
+    "MODE_ALL": "Tous les utilisateurs",
+    "MODE_SELECTED": "Utilisateurs s\u00e9lectionn\u00e9s",
+    "LABEL_TARGETS": "Destinataires",
+    "ACTION_REFRESH_USERS": "Actualiser les utilisateurs",
+    "ACTION_SEND": "Envoyer",
+    "STATUS_LOAD_USERS_FAILED_WITH_STATUS": "Impossible de charger les utilisateurs connect\u00e9s ({{STATUS}}).",
+    "STATUS_USERS_REFRESHED": "Utilisateurs connect\u00e9s actualis\u00e9s.",
+    "STATUS_LOAD_USERS_FAILED": "Impossible de charger les utilisateurs connect\u00e9s.",
+    "STATUS_MESSAGE_REQUIRED": "Le message est requis.",
+    "STATUS_TARGET_REQUIRED": "S\u00e9lectionnez au moins un utilisateur cible.",
+    "STATUS_SEND_FAILED_WITH_STATUS": "\u00c9chec de l'envoi ({{STATUS}}).",
+    "STATUS_SENT": "Notification envoy\u00e9e.",
+    "STATUS_SEND_FAILED": "\u00c9chec de l'envoi.",
+    "TOAST_ADMIN_MESSAGE": "Message administrateur :",
+    "TOAST_DISMISS_ARIA": "Fermer la notification"
+  }
+}

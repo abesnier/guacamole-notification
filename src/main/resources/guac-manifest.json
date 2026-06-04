@@ -14,5 +14,9 @@
   "html": [
     "notify-admin.html"
   ],
-  "resources": {}
+  "resources": {},
+  "translations": [
+    "translations/en.json",
+    "translations/fr.json"
+  ]
 }

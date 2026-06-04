@@ -20,7 +20,7 @@ public class GuacNotifyExtensionRootResource {
         this.currentUsername = currentUsername;
     }
 
-    @Path("")
+    @Path("notifications")
     public NotificationResource notifications() {
         return new NotificationResource(STORE, CONNECTED_USERS, AUTHORIZER, currentUsername);
     }

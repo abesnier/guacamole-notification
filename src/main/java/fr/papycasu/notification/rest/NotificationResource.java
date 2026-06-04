@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
 
-@Path("notifications")
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationResource {
 

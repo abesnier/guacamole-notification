@@ -30,6 +30,7 @@ public class GuacNotifyAuthenticationProvider extends AbstractAuthenticationProv
         if (authenticatedUser == null) {
             return null;
         }
+        AdminPermissionRegistry.initialize(authenticatedUser.getIdentifier());
         return new GuacNotifyUserContext(this, authenticatedUser.getIdentifier());
     }
 

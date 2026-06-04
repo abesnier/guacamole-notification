@@ -14,11 +14,18 @@ public final class AdminPermissionRegistry {
     private AdminPermissionRegistry() {
     }
 
+    public static void initialize(String username) {
+        if (username == null || username.isBlank()) {
+            return;
+        }
+        ADMIN_BY_USER.put(username, false);
+    }
+
     public static void record(String username, boolean isAdmin) {
         if (username == null || username.isBlank()) {
             return;
         }
-        ADMIN_BY_USER.put(username, isAdmin);
+        ADMIN_BY_USER.merge(username, isAdmin, (existing, value) -> existing || value);
     }
 
     public static boolean isAdmin(String username) {

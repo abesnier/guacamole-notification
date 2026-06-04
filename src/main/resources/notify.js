@@ -118,11 +118,15 @@
         closeBtn.setAttribute('aria-label', 'Dismiss notification');
         closeBtn.addEventListener('click', function () {
             toast.classList.add('guacnotify-toast-hiding');
-            toast.addEventListener('transitionend', function () {
-                if (toast.parentNode) {
+            var removed = false;
+            function removeSelf() {
+                if (!removed && toast.parentNode) {
+                    removed = true;
                     toast.parentNode.removeChild(toast);
                 }
-            });
+            }
+            toast.addEventListener('transitionend', removeSelf);
+            setTimeout(removeSelf, 400);
         });
 
         toast.appendChild(text);

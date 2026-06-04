@@ -5,6 +5,7 @@ import fr.papycasu.notifications.model.SendNotificationRequest;
 import fr.papycasu.notifications.security.AdminAuthorizer;
 import fr.papycasu.notifications.service.ConnectedUserService;
 import fr.papycasu.notifications.store.NotificationStore;
+import org.apache.guacamole.GuacamoleSecurityException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -36,7 +37,7 @@ public class NotificationResource {
 
     @GET
     @Path("connected-users")
-    public List<String> getConnectedUsers() {
+    public List<String> getConnectedUsers() throws GuacamoleSecurityException {
         adminAuthorizer.requireAdmin(currentUsername);
         return connectedUsers.getConnectedUserIds();
     }
@@ -44,7 +45,7 @@ public class NotificationResource {
     @POST
     @Path("broadcast")
     @Consumes(MediaType.APPLICATION_JSON)
-    public NotificationMessage broadcast(SendNotificationRequest request) {
+    public NotificationMessage broadcast(SendNotificationRequest request) throws GuacamoleSecurityException {
         adminAuthorizer.requireAdmin(currentUsername);
 
         boolean all = "all".equalsIgnoreCase(request.getTargetMode());

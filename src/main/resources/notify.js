@@ -11,7 +11,27 @@
     }
 
     function readAuthToken() {
-        return localStorage.getItem('GUAC_AUTH_TOKEN') || '';
+        // First choice: read live token from AngularJS authenticationService
+        try {
+            var injector = angular.element(document.body).injector();
+            if (injector) {
+                var authSvc = injector.get('authenticationService');
+                if (authSvc && authSvc.getCurrentToken) {
+                    var t = authSvc.getCurrentToken();
+                    if (t) { return t; }
+                }
+            }
+        } catch (e) {}
+
+        // Fallback: bare localStorage key
+        var bare = localStorage.getItem('GUAC_AUTH_TOKEN');
+        if (bare) { return bare; }
+
+        // Fallback: AngularJS localStorageService prefixed key
+        var prefixed = localStorage.getItem('ls.GUAC_AUTH_TOKEN');
+        if (prefixed) { return prefixed; }
+
+        return '';
     }
 
     function buildUrl(path, query) {

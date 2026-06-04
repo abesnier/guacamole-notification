@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Produces(MediaType.APPLICATION_JSON)
 public class NotificationResource {
@@ -33,6 +34,12 @@ public class NotificationResource {
         this.connectedUsers = connectedUsers;
         this.adminAuthorizer = adminAuthorizer;
         this.currentUsername = currentUsername;
+    }
+
+    @GET
+    @Path("admin-status")
+    public Map<String, Boolean> getAdminStatus() {
+        return Map.of("admin", adminAuthorizer.isAdmin(currentUsername));
     }
 
     @GET

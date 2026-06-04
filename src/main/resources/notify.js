@@ -5,6 +5,7 @@
     var SETTINGS_TAB_ID = 'notifications';
     var state = {
         since: Date.now(),
+        isAdmin: null,
         hasLoadedConnectedUsers: false,
         wasInNotificationsTab: false
     };
@@ -261,32 +262,25 @@
     }
 
     async function userCanAdministerSystem() {
+        if (state.isAdmin !== null) {
+            return state.isAdmin;
+        }
+
         try {
-            var injector = angular.element(document.body).injector();
-            if (!injector) {
-                return false;
+            var response = await apiFetch(buildUrl('/admin-status'));
+            if (!response.ok) {
+                state.isAdmin = false;
+                return state.isAdmin;
             }
 
-            var authenticationService = injector.get('authenticationService');
-            var permissionService = injector.get('permissionService');
-            var PermissionSet = injector.get('PermissionSet');
-            var dataSources = authenticationService.getAvailableDataSources();
-            var currentUsername = authenticationService.getCurrentUsername();
-
-            var permissionSets = await Promise.all(dataSources.map(function (dataSource) {
-                return Promise.resolve(permissionService.getEffectivePermissions(dataSource, currentUsername));
-            }));
-
-            return permissionSets.some(function (permissions) {
-                return PermissionSet.hasSystemPermission(
-                    permissions,
-                    PermissionSet.SystemPermissionType.ADMINISTER
-                );
-            });
+            var payload = await response.json();
+            state.isAdmin = !!(payload && payload.admin);
+            return state.isAdmin;
         }
         catch (err) {
             console.debug('guacnotify admin permission check failed', err);
-            return false;
+            state.isAdmin = false;
+            return state.isAdmin;
         }
     }
 

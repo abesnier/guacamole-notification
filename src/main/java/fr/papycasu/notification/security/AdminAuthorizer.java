@@ -8,8 +8,12 @@ import org.apache.guacamole.GuacamoleSecurityException;
  */
 public class AdminAuthorizer {
 
+    public boolean isAdmin(String username) {
+        return AdminPermissionRegistry.isAdmin(username);
+    }
+
     public void requireAdmin(String username) throws GuacamoleSecurityException {
-        if (!AdminPermissionRegistry.isAdmin(username)) {
+        if (!isAdmin(username)) {
             throw new GuacamoleSecurityException("Permission denied.");
         }
     }
